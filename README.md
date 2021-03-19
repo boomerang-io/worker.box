@@ -1,2 +1,27 @@
-# box.service
-Java Spring integration with Box, useful in the flow tasks
+# Box Worker
+
+This is a community created service for integration with Box and used in Boomerang Flow Tasks.
+
+## Design
+
+- Developed with Java and Spring Boot. 
+- This **does not** rely on the Boomerang Worker CLI or Boomerang Worker Core. As such the Lifecycle watcher must be enabled when running as a Boomerang Flow task
+- Utilizes a bash script called start.sh as the entrypoint to the container and starts the JAR
+
+## Developing
+
+### How to run locally
+
+TBA
+
+### How to test locally
+
+TBA
+
+## Packaging
+
+TBA
+
+## License
+
+Apache 2.0
