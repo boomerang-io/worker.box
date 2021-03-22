@@ -130,7 +130,7 @@ public class BoxCommand implements Runnable {
       BoxFolderInfoVo folder = boxService.getFolder(folderId);
       ObjectMapper mapper = new ObjectMapper();
       OutputMap output = map(STATUS, OK).add("folder", mapper.writeValueAsString(folder));
-      return output.json();
+      return mapper.writeValueAsString(output);
     } catch (Exception e) {
       OutputMap output = map(STATUS, "Error").add(ERROR, e.getMessage());
       return output.json();
