@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ibm.garage.box.service.BoxService;
+import com.ibm.garage.box.util.EssentialsUtils.OutputMap;
 import com.ibm.garage.box.vo.BoxFolderInfoVo;
 import com.ibm.garage.box.vo.BoxFolderVo;
 import com.ibm.garage.box.vo.BoxJoinRequest;
@@ -124,13 +125,15 @@ public class BoxCommand implements Runnable {
   }
 
   @Command(name = "info")
-  public void info(@Parameters(index = "0", paramLabel = "<folderId>") String folderId) {
+  public String info(@Parameters(index = "0", paramLabel = "<folderId>") String folderId) {
     try {
       BoxFolderInfoVo folder = boxService.getFolder(folderId);
       ObjectMapper mapper = new ObjectMapper();
-      output(map(STATUS, OK).add("folder", mapper.writeValueAsString(folder)));
+      OutputMap output = map(STATUS, OK).add("folder", mapper.writeValueAsString(folder));
+      return output.json();
     } catch (Exception e) {
-      errorOutput(e);
+      OutputMap output = map(STATUS, "Error").add(ERROR, e.getMessage());
+      return output.json();
     }
   }
 

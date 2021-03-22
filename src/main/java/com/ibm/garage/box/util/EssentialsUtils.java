@@ -77,5 +77,17 @@ public class EssentialsUtils {
       return map.keySet().stream().map(key -> key + "=" + map.get(key))
           .collect(Collectors.joining(", ", "{", "}"));
     }
+
+    public String json() {
+      return map.keySet().stream().map(key -> toJson(key) + ":" + toJson(map.get(key)))
+          .collect(Collectors.joining(", ", "{", "}"));
+    }
+
+    private String toJson(String s) {
+      if (s == null) {
+        return null;
+      }
+      return "\"" + s + "\"";
+    }
   }
 }
