@@ -15,4 +15,4 @@ RUN chmod -R u+x $BMRG_HOME \
     USER 2000
 
 EXPOSE 8080
-ENTRYPOINT [ "sh", "-c", "java -Djava.security.egd=file:/dev/./urandom -jar ./service.jar" ]
+ENTRYPOINT [ "sh", "-c", "java -Djava.security.egd=file:/dev/./urandom -jar ./service.jar $0 $@" ]
