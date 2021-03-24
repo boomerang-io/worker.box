@@ -20,7 +20,17 @@ TBA
 
 ## Packaging
 
-TBA
+### Automatic
+
+1. Create Git Tag
+2. Push Git Tag
+3. Check Boomerang CICD
+
+### Manual
+
+```bash
+VERSION=<tag> && mvn clean package -Dversion.name=$VERSION && docker build -t boomerangio/box-service:$VERSION --build-arg BMRG_TAG=$VERSION . && docker push boomerangio/box-service:$VERSION
+```
 
 ## License
 
