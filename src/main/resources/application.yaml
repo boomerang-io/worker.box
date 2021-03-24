@@ -1,0 +1,62 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: box-service
+  profiles:
+    active: dev
+  main:
+    web-application-type: NONE
+  jmx:
+    enabled: false
+---
+spring:
+  profiles: prod
+  box:
+    jsonFile:
+---
+spring:
+  #stage use prod parameters
+  profiles: stage-prod
+  box:
+    jsonFile:
+logging:
+  level:
+    root: DEBUG
+---
+spring:
+  #stage use dev parameters
+  profiles: stage
+  box:
+    jsonFile:
+logging:
+  level:
+    root: DEBUG
+---
+spring:
+  profiles: dev
+  box:
+    configJson:
+    jsonFile:
+logging:
+  level:
+    root: INFO
+    com:
+      ibm: DEBUG
+---
+spring:
+  profiles: public2dev
+  box:
+    jsonFile:
+logging:
+  level:
+    root: DEBUG   
+---
+spring:
+  profiles: unittest
+logging:
+  level:
+    root: DEBUG
+    com:
+      ibm: DEBUG    
