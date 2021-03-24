@@ -3,6 +3,7 @@ package com.ibm.garage.box.command;
 import static com.ibm.garage.box.util.EssentialsUtils.map;
 import static com.ibm.garage.box.util.EssentialsUtils.output;
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,7 +43,7 @@ public class BoxCommand implements Runnable {
   public void list() {
     try {
       List<BoxFolderVo> folders = boxService.getFolders();
-      ObjectMapper mapper = new ObjectMapper();
+      ObjectMapper mapper = getObjectMapper();
       output(map(STATUS, OK).add("folders", mapper.writeValueAsString(folders)));
     } catch (Exception e) {
       errorOutput(e);
@@ -127,11 +128,18 @@ public class BoxCommand implements Runnable {
   public void info(@Parameters(index = "0", paramLabel = "<folderId>") String folderId) {
     try {
       BoxFolderInfoVo folder = boxService.getFolder(folderId);
-      ObjectMapper mapper = new ObjectMapper();
+      ObjectMapper mapper = getObjectMapper();
       output(map(STATUS, OK).add("folder", mapper.writeValueAsString(folder)));
     } catch (Exception e) {
       errorOutput(e);
     }
+  }
+
+  private ObjectMapper getObjectMapper() {
+    ObjectMapper mapper = new ObjectMapper();
+    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
+    mapper.setDateFormat(df);
+    return mapper;
   }
 
   private void errorOutput(Exception e) {
