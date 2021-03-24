@@ -15,4 +15,4 @@ RUN chmod -R u+x $BMRG_HOME \
     USER 2000
 
 EXPOSE 8080
-ENTRYPOINT [ "sh", "-c", "java -Djava.security.egd=file:/dev/./urandom -jar ./service.jar $0 $@" ]
+ENTRYPOINT [ "sh", "-c", "java -Dhttp.proxyHost=$PROXY_HOST -Dhttp.proxyPort=$PROXY_PORT -Dhttps.proxyHost=$PROXY_HOST -Dhttps.proxyPort=$PROXY_PORT -Dhttp.nonProxyHosts=$NO_PROXY -Djava.security.egd=file:/dev/./urandom -jar ./service.jar $0 $@" ]
