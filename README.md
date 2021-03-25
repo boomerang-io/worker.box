@@ -35,10 +35,6 @@ Build and run the docker image using the following command:
 VERSION=<tag> && mvn clean package -Dversion.name=$VERSION && docker build -t boomerangio/box-service:$VERSION --build-arg BMRG_TAG=$VERSION . && ENTERPRISEID=<enterpriseId> && CLIENTID=<clientId> && CLIENTSECRET=<clientSecret> && PUBLICKEYID=<publicKeyId> && PRIVATEKEY=<privateKey> && PASSPHRASE=<passphrase> && docker run -it boomerangio/box-service:$VERSION box list --enterpriseId $ENTERPRISEID --clientId $CLIENTID --clientSecret $CLIENTSECRET --publicKeyId $PUBLICKEYID --privateKey $PRIVATEKEY --passphrase $PASSPHRASE
 ```
 
-### How to test locally
-
-TBA
-
 ## Packaging
 
 ### Automatic
