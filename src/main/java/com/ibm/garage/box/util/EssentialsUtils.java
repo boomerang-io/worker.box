@@ -26,19 +26,26 @@ public class EssentialsUtils {
 
   private static void outputCustomTask(Map<String, String> props) {
     try {
-      File lifecycleDir = new File("/lifecycle");
-      if (!lifecycleDir.exists()) {
-        lifecycleDir.mkdir();
+      File tektonDir = new File("/tekton/results");
+      if (!tektonDir.exists()) {
+        tektonDir.mkdirs();
       }
-      File file = new File("/lifecycle/env");
 
-      BufferedWriter out = new BufferedWriter(new FileWriter(file, true));
-      for (Map.Entry<String, String> entry : props.entrySet()) {
-        out.write("\n" + entry.getKey() + "=" + entry.getValue());
+      for (String key : props.keySet()) {
+        File file = null;
+        BufferedWriter out = null;
+        try {
+          file = new File(String.format("/tekton/results/%s", key));
+          out = new BufferedWriter(new FileWriter(file, true));
+          out.write(props.get(key));
+        } catch (IOException ioe) {
+          LOGGER.error(String.format("unable to save property named %s, reason: %s", key, ioe.getMessage()));
+        } finally {
+          out.close();
+        }
       }
-      out.close();
     } catch (IOException e) {
-      LOGGER.debug(String.format("failed to save props, reason: %s", e.getMessage()));
+      LOGGER.debug(String.format("failed to save properties, reason: %s", e.getMessage()));
     }
   }
 
