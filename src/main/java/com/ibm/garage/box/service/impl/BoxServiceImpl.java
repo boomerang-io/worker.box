@@ -30,6 +30,7 @@ import com.box.sdk.InMemoryLRUAccessTokenCache;
 import com.box.sdk.JWTEncryptionPreferences;
 import com.ibm.garage.box.config.BoxServiceConfig;
 import com.ibm.garage.box.service.BoxService;
+import com.ibm.garage.box.service.TaskException;
 import com.ibm.garage.box.vo.BoxFolderInfoVo;
 import com.ibm.garage.box.vo.BoxFolderVo;
 import com.ibm.garage.box.vo.BoxJoinRequest;
@@ -84,8 +85,7 @@ public class BoxServiceImpl implements BoxService {
         }
         return api;
       } catch (Exception e) {
-        LOGGER.error("Box api config error.", e);
-        return null;
+        throw new TaskException(e.getMessage(), e);
       }
     }
   }

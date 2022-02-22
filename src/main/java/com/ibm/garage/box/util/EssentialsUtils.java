@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Map;
 import java.util.Properties;
 import java.util.TreeMap;
@@ -37,6 +39,16 @@ public class EssentialsUtils {
         LOGGER.error(
             String.format("unable to save property named %s, reason: %s", key, e.getMessage()));
       }
+    }
+  }
+
+  public static void outputFile(String outputFilePath, String content) throws IOException {
+    Path outputFile = Path.of(outputFilePath);
+    if(Files.notExists(outputFile.getParent())) {
+      Files.createDirectories(outputFile.getParent());
+    }
+    try(BufferedWriter out = new BufferedWriter(new FileWriter(outputFilePath, false))) {
+        out.write(content);
     }
   }
 
