@@ -1,6 +1,7 @@
 package com.ibm.garage.box.service.impl;
 
 import static java.util.stream.Collectors.toList;
+import static com.ibm.garage.box.util.EssentialsUtils.maskParameterValues;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
@@ -62,8 +63,8 @@ public class BoxServiceImpl implements BoxService {
       return api;
     } else {
       try {
-        LOGGER.debug("box config file is :{}", config.getJsonFile());
-        LOGGER.debug("box config json is :{}", config.getConfigJson());
+        LOGGER.debug("box config file is :{}", maskParameterValues(config.getJsonFile()));
+        LOGGER.debug("box config json is :{}", maskParameterValues(config.getConfigJson()));
         BoxConfig boxConfig = null;
         if (config.getConfigJson() != null && !config.getConfigJson().isEmpty()) {
           boxConfig = BoxConfig.readFrom(new StringReader(config.getConfigJson()));

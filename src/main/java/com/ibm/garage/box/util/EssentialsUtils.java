@@ -20,6 +20,7 @@ public class EssentialsUtils {
   private static final String SEPARATOR = "/";
   private static final String TASK_INPUT_PROPS_FILENAME = "task.input.properties";
   private static final String PROPS_PATH = "props";
+  private static final String[] DEFAULT_MASKED_PARAMETERS = {"clientID", "clientSecret", "publicKeyID", "passphrase"};
 
   public static void output(OutputMap map) {
     LOGGER.debug("output props: {}", map.content());
@@ -65,7 +66,7 @@ public class EssentialsUtils {
       }
       p.load(new FileReader(taskPropertiesFile));
     } catch (IOException e) {
-      LOGGER.debug("failed to load properties");
+      LOGGER.error("failed to load properties", e);
     }
     return p;
   }
@@ -87,5 +88,23 @@ public class EssentialsUtils {
       return map.keySet().stream().map(key -> key + "=" + map.get(key))
           .collect(Collectors.joining(", ", "{", "}"));
     }
+  }
+
+  public static String maskParameterValues(String log) {
+    return maskParameterValues(log, DEFAULT_MASKED_PARAMETERS);
+  }
+
+  public static String maskParameterValues(String log, String... parameterNames) {
+    if (log == null || log.isEmpty()) {
+      return "";
+    }
+
+    String result = log;
+    for (String param : parameterNames) {
+        String regexp = "(?<=(-{2}|\")" + param + "(,|\":)\\s.{2}).+(?=.{2}[,\\]\"])";
+        result = result.replaceAll(regexp, "*****");
+    }
+
+    return result;
   }
 }

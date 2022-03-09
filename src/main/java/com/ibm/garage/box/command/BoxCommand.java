@@ -49,6 +49,7 @@ public class BoxCommand implements Runnable {
       ObjectMapper mapper = getObjectMapper();
       String jsonResponse = mapper.writeValueAsString(folders);
       if(outputFilePath != null && !outputFilePath.isEmpty()) {
+        LOGGER.info(String.format("Saving task output to file %s", outputFilePath));
         outputFile(outputFilePath, jsonResponse);
         output(map(STATUS, OK));
       }
@@ -143,6 +144,7 @@ public class BoxCommand implements Runnable {
       ObjectMapper mapper = getObjectMapper();
       String jsonResponse = mapper.writeValueAsString(folder);
       if(outputFilePath != null && !outputFilePath.isEmpty()) {
+        LOGGER.info(String.format("Saving task output to file %s", outputFilePath));
         outputFile(outputFilePath, jsonResponse);
         output(map(STATUS, OK));
       }
