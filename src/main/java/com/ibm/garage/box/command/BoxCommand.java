@@ -2,9 +2,12 @@ package com.ibm.garage.box.command;
 
 import static com.ibm.garage.box.util.EssentialsUtils.map;
 import static com.ibm.garage.box.util.EssentialsUtils.output;
+import static com.ibm.garage.box.util.EssentialsUtils.outputFile;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,11 +43,19 @@ public class BoxCommand implements Runnable {
   public void run() {}
 
   @Command(name = "list")
-  public void list() {
+  public void list(@Option(names = {"-o", "--outputFilePath"},
+      paramLabel = "<outputFilePath>") String outputFilePath) {
     try {
       List<BoxFolderVo> folders = boxService.getFolders();
       ObjectMapper mapper = getObjectMapper();
-      output(map(STATUS, OK).add("folders", mapper.writeValueAsString(folders)));
+      String jsonResponse = mapper.writeValueAsString(folders);
+      if (StringUtils.isNotBlank(outputFilePath)) {
+        LOGGER.info("Saving task output to file {}", outputFilePath);
+        outputFile(outputFilePath, jsonResponse);
+        output(map(STATUS, OK));
+      } else {
+        output(map(STATUS, OK).add("folders", jsonResponse));
+      }
     } catch (Exception e) {
       errorOutput(e);
     }
@@ -125,11 +136,20 @@ public class BoxCommand implements Runnable {
   }
 
   @Command(name = "info")
-  public void info(@Parameters(index = "0", paramLabel = "<folderId>") String folderId) {
+  public void info(@Parameters(index = "0", paramLabel = "<folderId>") String folderId,
+      @Option(names = {"-o", "--outputFilePath"},
+          paramLabel = "<outputFilePath>") String outputFilePath) {
     try {
       BoxFolderInfoVo folder = boxService.getFolder(folderId);
       ObjectMapper mapper = getObjectMapper();
-      output(map(STATUS, OK).add("folder", mapper.writeValueAsString(folder)));
+      String jsonResponse = mapper.writeValueAsString(folder);
+      if (StringUtils.isNotBlank(outputFilePath)) {
+        LOGGER.info("Saving task output to file {}", outputFilePath);
+        outputFile(outputFilePath, jsonResponse);
+        output(map(STATUS, OK));
+      } else {
+        output(map(STATUS, OK).add("folder", jsonResponse));
+      }
     } catch (Exception e) {
       errorOutput(e);
     }

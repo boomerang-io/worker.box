@@ -19,6 +19,7 @@ import com.ibm.garage.box.command.BoxOptions;
 import com.ibm.garage.box.util.EssentialsUtils;
 import picocli.CommandLine;
 import picocli.CommandLine.ParseResult;
+import static com.ibm.garage.box.util.EssentialsUtils.maskParameterValues;
 
 @SpringBootApplication(exclude = {JmxAutoConfiguration.class})
 public class Application implements CommandLineRunner {
@@ -32,7 +33,7 @@ public class Application implements CommandLineRunner {
   private BaseCommand baseCommand;
 
   public static void main(String[] args) {
-    LOGGER.debug("args before options processing: " + Arrays.toString(args));
+    LOGGER.debug("args before options processing: " + maskParameterValues(Arrays.toString(args)));
 
     args = processInputParameters(args);
 
@@ -47,6 +48,7 @@ public class Application implements CommandLineRunner {
     try {
       cl.parseArgs(args);
     } catch (Exception e) {
+      LOGGER.error("Error parsing arguments", e);
       System.exit(1);
     }
     ParseResult result = cl.getParseResult();
@@ -62,7 +64,7 @@ public class Application implements CommandLineRunner {
 
   @Override
   public void run(String... args) throws Exception {
-    LOGGER.debug("args after options processing: " + Arrays.toString(args));
+    LOGGER.debug("args after options processing: " + maskParameterValues(Arrays.toString(args)));
     CommandLine cl = new CommandLine(baseCommand);
     cl.addSubcommand("box", boxCommand.getCommandLine());
     cl.parseWithHandler(new CommandLine.RunLast(), args);
