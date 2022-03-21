@@ -16,7 +16,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<java.version>1.8</java.version>
+		<java.version>11</java.version>
 		<box-sdk.version>2.48.0</box-sdk.version>
 		<guava.version>30.0-jre</guava.version>
 		<picocli.version>3.9.6</picocli.version>

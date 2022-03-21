@@ -1,6 +1,7 @@
 package com.ibm.garage.box.service.impl;
 
 import static java.util.stream.Collectors.toList;
+import static com.ibm.garage.box.util.EssentialsUtils.maskParameterValues;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
@@ -30,6 +31,7 @@ import com.box.sdk.InMemoryLRUAccessTokenCache;
 import com.box.sdk.JWTEncryptionPreferences;
 import com.ibm.garage.box.config.BoxServiceConfig;
 import com.ibm.garage.box.service.BoxService;
+import com.ibm.garage.box.service.TaskException;
 import com.ibm.garage.box.vo.BoxFolderInfoVo;
 import com.ibm.garage.box.vo.BoxFolderVo;
 import com.ibm.garage.box.vo.BoxJoinRequest;
@@ -61,8 +63,8 @@ public class BoxServiceImpl implements BoxService {
       return api;
     } else {
       try {
-        LOGGER.debug("box config file is :{}", config.getJsonFile());
-        LOGGER.debug("box config json is :{}", config.getConfigJson());
+        LOGGER.debug("box config file is :{}", maskParameterValues(config.getJsonFile()));
+        LOGGER.debug("box config json is :{}", maskParameterValues(config.getConfigJson()));
         BoxConfig boxConfig = null;
         if (config.getConfigJson() != null && !config.getConfigJson().isEmpty()) {
           boxConfig = BoxConfig.readFrom(new StringReader(config.getConfigJson()));
@@ -84,8 +86,7 @@ public class BoxServiceImpl implements BoxService {
         }
         return api;
       } catch (Exception e) {
-        LOGGER.error("Box api config error.", e);
-        return null;
+        throw new TaskException(e.getMessage(), e);
       }
     }
   }
