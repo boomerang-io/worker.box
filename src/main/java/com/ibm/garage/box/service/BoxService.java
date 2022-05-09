@@ -25,6 +25,16 @@ public interface BoxService {
 
   BoxFolderInfoVo getFolder(String folderId) throws IOException;
 
+  /**
+   * Upload a file to the desired Box folder. If a file with the same name already exists, upload a
+   * new version.
+   * 
+   * @param folderId - the ID of the Box folder where we want to upload the file
+   * @param name - the name of the uploaded file
+   * @param filePath - the file path to the uploaded file
+   * @return the ID of the uploaded file
+   * @throws IOException
+   */
   String upload(String folderId, String name, String filePath) throws IOException;
 
   void download(String fileId, String filePath) throws IOException;
