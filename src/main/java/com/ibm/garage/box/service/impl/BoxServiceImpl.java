@@ -1,7 +1,7 @@
 package com.ibm.garage.box.service.impl;
 
-import static java.util.stream.Collectors.toList;
 import static com.ibm.garage.box.util.EssentialsUtils.maskParameterValues;
+import static java.util.stream.Collectors.toList;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
@@ -159,7 +159,11 @@ public class BoxServiceImpl implements BoxService {
   @Override
   public String upload(String folderId, String name, String filePath) throws IOException {
     BoxFolder folder = new BoxFolder(getAPI(), folderId);
-    BoxFile.Info info = folder.uploadFile(new FileInputStream(filePath), name);
+    BoxFile.Info existingFile = getFile(folder, name);
+
+    BoxFile.Info info =
+        existingFile == null ? folder.uploadFile(new FileInputStream(filePath), name)
+            : uploadNewVersion(existingFile.getID(), filePath);
     return info.getID();
   }
 
@@ -256,6 +260,30 @@ public class BoxServiceImpl implements BoxService {
     boxUserVo.setEmail(boxUser.getLogin());
 
     return boxUserVo;
+  }
+
+  private BoxFile.Info uploadNewVersion(String fileId, String filePath) throws IOException {
+    BoxFile file = new BoxFile(getAPI(), fileId);
+    try {
+      file.lock();
+      return file.uploadNewVersion(new FileInputStream(filePath));
+    } finally {
+      file.unlock();
+    }
+  }
+
+  private BoxFile.Info getFile(BoxFolder folder, String filename) {
+    for (BoxItem.Info itemInfo : folder) {
+      if (isSameFile(itemInfo, filename)) {
+        return (BoxFile.Info) itemInfo;
+      }
+    }
+
+    return null;
+  }
+
+  private boolean isSameFile(BoxItem.Info item, String filename) {
+    return item instanceof BoxFile.Info && filename.equals(item.getName());
   }
 
 }
