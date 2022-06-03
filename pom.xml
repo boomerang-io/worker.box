@@ -19,7 +19,7 @@
 		<java.version>11</java.version>
 		<box-sdk.version>2.48.0</box-sdk.version>
 		<guava.version>30.0-jre</guava.version>
-		<picocli.version>3.9.6</picocli.version>
+		<picocli.version>4.6.3</picocli.version>
 	</properties>
 
 	<dependencies>
